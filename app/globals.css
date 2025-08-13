@@ -1,0 +1,567 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@theme {
+  --font-sans: var(--font-inter), "Noto Sans Devanagari", system-ui, sans-serif;
+
+  /* Clean Healthcare Color Palette */
+  /* CSS Variables for theme */
+  :root {
+    --font-sans: var(--font-inter), "Noto Sans Devanagari", system-ui, sans-serif;
+
+    /* Clean Healthcare Color Palette */
+    --color-medical-50: #f8fafc;
+    --color-medical-100: #f1f5f9;
+    --color-medical-200: #e2e8f0;
+    --color-medical-300: #cbd5e1;
+    --color-medical-400: #94a3b8;
+    --color-medical-500: #64748b;
+    --color-medical-600: #475569;
+    --color-medical-700: #334155;
+    --color-medical-800: #1e293b;
+    --color-medical-900: #0f172a;
+
+    /* Primary Healthcare Blue */
+    --color-healthcare-50: #eff6ff;
+    --color-healthcare-100: #dbeafe;
+    --color-healthcare-200: #bfdbfe;
+    --color-healthcare-300: #93c5fd;
+    --color-healthcare-400: #60a5fa;
+    --color-healthcare-500: #3b82f6;
+    --color-healthcare-600: #2563eb;
+    --color-healthcare-700: #1d4ed8;
+    --color-healthcare-800: #1e40af;
+    --color-healthcare-900: #1e3a8a;
+
+    /* Success Green */
+    --color-success-50: #f0fdf4;
+    --color-success-100: #dcfce7;
+    --color-success-200: #bbf7d0;
+    --color-success-300: #86efac;
+    --color-success-400: #4ade80;
+    --color-success-500: #22c55e;
+    --color-success-600: #16a34a;
+    --color-success-700: #15803d;
+    --color-success-800: #166534;
+    --color-success-900: #14532d;
+
+    /* Warning Orange */
+    --color-warning-50: #fff7ed;
+    --color-warning-100: #ffedd5;
+    --color-warning-200: #fed7aa;
+    --color-warning-300: #fdba74;
+    --color-warning-400: #fb923c;
+    --color-warning-500: #f97316;
+    --color-warning-600: #ea580c;
+    --color-warning-700: #c2410c;
+    --color-warning-800: #9a3412;
+    --color-warning-900: #7c2d12;
+
+    /* Base theme colors */
+    --color-border: 214.3 31.8% 91.4%;
+    --color-input: 214.3 31.8% 91.4%;
+    --color-ring: 222.2 84% 4.9%;
+    --color-background: 0 0% 100%;
+    --color-foreground: 222.2 84% 4.9%;
+    --color-primary: 222.2 47.4% 11.2%;
+    --color-primary-foreground: 210 40% 98%;
+    --color-secondary: 210 40% 96%;
+    --color-secondary-foreground: 222.2 47.4% 11.2%;
+    --color-destructive: 0 84.2% 60.2%;
+    --color-destructive-foreground: 210 40% 98%;
+    --color-muted: 210 40% 96%;
+    --color-muted-foreground: 215.4 16.3% 46.9%;
+    --color-accent: 210 40% 96%;
+    --color-accent-foreground: 222.2 47.4% 11.2%;
+    --color-popover: 0 0% 100%;
+    --color-popover-foreground: 222.2 84% 4.9%;
+    --color-card: 0 0% 100%;
+    --color-card-foreground: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+}
+
+/* Enhanced watermark with better visibility and positioning */
+.watermark-bg {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #eff6ff 100%);
+}
+
+.watermark-bg::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  width: 300px;
+  height: 300px;
+  background-image: url("/images/ziagnosis-logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.04;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.watermark-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Enhanced form container with stunning gradients */
+/* Stunning watermark background for form */
+.form-container {
+  position: relative;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 30%, #eff6ff 70%, #ffffff 100%);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+.form-container::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  width: 320px;
+  height: 320px;
+  background-image: url('/images/ziagnosis-logo-watermark.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.08;
+  z-index: 0;
+  pointer-events: none;
+}
+.form-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Compact question groups optimized for A4 printing */
+.question-group {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  padding: 1rem;
+  border-left: 3px solid #3b82f6;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  margin-bottom: 0.75rem;
+  backdrop-filter: blur(5px);
+}
+
+.question-group:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Compact input styling for A4 optimization */
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 6px 10px;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  outline: none;
+  background: #ffffff;
+}
+
+/* Compact checkbox and radio styles */
+input[type="checkbox"],
+input[type="radio"] {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #3b82f6;
+  margin-right: 6px;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="radio"] {
+  border-radius: 50%;
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  background: #3b82f6;
+  border-color: #3b82f6;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  left: 1px;
+  top: -3px;
+  font-size: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+input[type="radio"]:checked::after {
+  content: "●";
+  position: absolute;
+  left: 2px;
+  top: -1px;
+  font-size: 6px;
+  color: white;
+}
+
+/* Enhanced button styling with better visibility */
+.btn-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px 0 rgba(59, 130, 246, 0.2);
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px -1px rgba(59, 130, 246, 0.3);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.9);
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+}
+
+.btn-secondary:hover {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Enhanced footer styling for world-class design */
+.footer-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #f0f9ff 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
+}
+
+.footer-contact-icon {
+  transition: all 0.2s ease;
+}
+
+.footer-contact-icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.footer-qr-container {
+  transition: all 0.2s ease;
+}
+
+.footer-qr-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15);
+}
+
+.footer-social-icons {
+  transition: all 0.2s ease;
+}
+
+.footer-social-icons:hover {
+  transform: scale(1.05);
+}
+
+.footer-address-bar {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+  transition: all 0.2s ease;
+}
+
+.footer-address-bar:hover {
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+
+/* Optimized print styles for single A4 page */
+@media print {
+  @page {
+    size: A4;
+    margin: 0.4in;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    color: black !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-break {
+    page-break-before: always;
+  }
+
+  .print-avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .form-container {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+    background: white !important;
+    padding: 0.5rem !important;
+  }
+
+  .question-group {
+    margin-bottom: 0.5rem !important;
+    padding: 0.5rem !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    background: white !important;
+    border: 1px solid #ccc !important;
+    border-left: 3px solid #000 !important;
+  }
+
+  .watermark-bg::before {
+    opacity: 0.05 !important;
+    width: 250px !important;
+    height: 250px !important;
+  }
+
+  /* Enhanced footer print styling */
+  .footer-section {
+    background: white !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    padding: 0.4rem !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .footer-contact-icon,
+  .footer-qr-container,
+  .footer-social-icons {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .footer-address-bar {
+    background: #000 !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    box-shadow: none !important;
+  }
+
+  /* Fixed print button visibility */
+  .print-button,
+  .btn-primary {
+    background: #000 !important;
+    color: white !important;
+    border: 2px solid #000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    padding: 8px 16px !important;
+    font-size: 12px !important;
+  }
+
+  /* Compact print layout */
+  h1 {
+    font-size: 16px !important;
+    margin-bottom: 0.3rem !important;
+  }
+  h2 {
+    font-size: 14px !important;
+    margin-bottom: 0.3rem !important;
+  }
+  h3 {
+    font-size: 13px !important;
+    margin-bottom: 0.3rem !important;
+  }
+
+  p,
+  span,
+  label {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 0.2rem !important;
+  }
+
+  .hindi-text {
+    font-size: 10px !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Enhanced print visibility for form elements */
+  input[type="checkbox"]:checked::after {
+    content: "✓" !important;
+    color: black !important;
+    font-weight: bold !important;
+    font-size: 9px !important;
+  }
+
+  input[type="radio"]:checked::after {
+    content: "●" !important;
+    color: black !important;
+    font-size: 6px !important;
+  }
+
+  input[type="checkbox"]:checked,
+  input[type="radio"]:checked {
+    background: #f0f9ff !important;
+    border-color: #000 !important;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  /* Ensure all text is black in print */
+  * {
+    color: black !important;
+  }
+
+  /* Compact spacing for A4 optimization */
+  .space-y-2 > * + * {
+    margin-top: 0.3rem !important;
+  }
+  .space-y-3 > * + * {
+    margin-top: 0.4rem !important;
+  }
+  .space-y-4 > * + * {
+    margin-top: 0.5rem !important;
+  }
+  .mb-3 {
+    margin-bottom: 0.4rem !important;
+  }
+  .mb-4 {
+    margin-bottom: 0.5rem !important;
+  }
+  .mb-6 {
+    margin-bottom: 0.6rem !important;
+  }
+  .mb-8 {
+    margin-bottom: 0.8rem !important;
+  }
+  .p-4 {
+    padding: 0.4rem !important;
+  }
+  .p-6 {
+    padding: 0.5rem !important;
+  }
+  .py-4 {
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.4rem !important;
+  }
+  .py-8 {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+  }
+}
+
+/* Enhanced responsive design */
+@media (max-width: 768px) {
+  .question-group {
+    padding: 0.75rem;
+  }
+
+  .btn-primary {
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: 14px;
+    height: 14px;
+  }
+
+  .form-container {
+    padding: 1rem;
+  }
+
+  /* Mobile-optimized footer */
+  .footer-section {
+    padding: 1rem;
+  }
+
+  .footer-contact-icon,
+  .footer-qr-container {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Stunning gradient text effects */
+.gradient-text {
+  background: linear-gradient(135deg, #1e40af, #059669, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Enhanced border styles */
+.border-l-3 {
+  border-left-width: 3px;
+}
+
+/* Subtle animations for better UX */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.question-group {
+  animation: fadeIn 0.3s ease-out;
+}
