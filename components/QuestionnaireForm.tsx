@@ -1,33 +1,40 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
+import { supabase } from "../lib/supabaseClient";
+import { toast } from "../hooks/use-toast";
 
 type ServicesNeeded = {
   [key: string]: string;
 };
 
 export type FormData = {
-  visitedDoctor: string;
-  noVisitReasons: string[];
-  servicesNeeded: ServicesNeeded;
-  useWellnessCentre: string;
-  cghsImportance: string;
-  wrongTreatment: string;
-  wrongTreatmentDetails: string;
-  bloodTestCost: string;
-  genericMedicines: string;
-  visitHours: string[];
-  healthSessions: string;
-  healthTopics: string;
+  visited_doctor: string;
+  no_visit_reasons: string[];
+  services_needed: ServicesNeeded;
+  use_wellness_centre: string;
+  cghs_importance: string;
+  wrong_treatment: string;
+  wrong_treatment_details: string;
+  blood_test_cost: string;
+  generic_medicines: string;
+  visit_hours: string[];
+  health_sessions: string;
+  health_topics: string;
   feedback: string;
-  followUp: string;
+  follow_up: string;
   phone: string;
   whatsapp: string;
   satisfaction: string;
   name: string;
   age: string;
   area: string;
-  otherReason: string;
+  other_reason: string;
+  gender: string;
+  contact: string;
+  address: string;
+  emergency_contact: string;
+  blood_group: string;
 };
 
 interface QuestionnaireFormProps {
@@ -36,27 +43,32 @@ interface QuestionnaireFormProps {
 
 const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
   const [formData, setFormData] = useState<FormData>({
-    visitedDoctor: "",
-    noVisitReasons: [],
-    servicesNeeded: {},
-    useWellnessCentre: "",
-    cghsImportance: "",
-    wrongTreatment: "",
-    wrongTreatmentDetails: "",
-    bloodTestCost: "",
-    genericMedicines: "",
-    visitHours: [],
-    healthSessions: "",
-    healthTopics: "",
-    feedback: "",
-    followUp: "",
-    phone: "",
-    whatsapp: "",
-    satisfaction: "",
-    name: "",
-    age: "",
-    area: "",
-    otherReason: "",
+  visited_doctor: "",
+  no_visit_reasons: [],
+  services_needed: {},
+  use_wellness_centre: "",
+  cghs_importance: "",
+  wrong_treatment: "",
+  wrong_treatment_details: "",
+  blood_test_cost: "",
+  generic_medicines: "",
+  visit_hours: [],
+  health_sessions: "",
+  health_topics: "",
+  feedback: "",
+  follow_up: "",
+  phone: "",
+  whatsapp: "",
+  satisfaction: "",
+  name: "",
+  age: "",
+  area: "",
+  other_reason: "",
+  gender: "",
+  contact: "",
+  address: "",
+  emergency_contact: "",
+  blood_group: "",
   })
 
   const handleInputChange = (field: keyof FormData, value: string) => {
@@ -76,18 +88,79 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
   }
 
   const handleRankingChange = (service: string, rank: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      servicesNeeded: {
-        ...prev.servicesNeeded,
-        [service]: rank,
-      },
-    }))
+  setFormData((prev) => ({
+    ...prev,
+    services_needed: {
+      ...prev.services_needed,
+      [service]: rank,
+    },
+  }))
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    onSubmit(formData)
+  const [error, setError] = useState<string>("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Validate mandatory personal info
+  if (!formData.name || !formData.age || !formData.gender || !formData.contact) {
+      setError("Please fill all mandatory personal information fields.");
+      return;
+    }
+    if (!formData.address || !formData.emergency_contact || !formData.blood_group) {
+      setError("Please fill all mandatory address, emergency contact, and blood group fields.");
+      return;
+    }
+    setError("");
+
+    // Prepare data for Supabase (serialize arrays/objects to JSON)
+    const supabaseData = {
+      ...formData,
+      no_visit_reasons: JSON.stringify(formData.no_visit_reasons),
+      services_needed: JSON.stringify(formData.services_needed),
+      visit_hours: JSON.stringify(formData.visit_hours),
+      visited_doctor: formData.visited_doctor,
+      use_wellness_centre: formData.use_wellness_centre,
+      cghs_importance: formData.cghs_importance,
+      wrong_treatment: formData.wrong_treatment,
+      wrong_treatment_details: formData.wrong_treatment_details,
+      blood_test_cost: formData.blood_test_cost,
+      generic_medicines: formData.generic_medicines,
+      health_sessions: formData.health_sessions,
+      health_topics: formData.health_topics,
+      feedback: formData.feedback,
+      follow_up: formData.follow_up,
+      phone: formData.phone,
+      whatsapp: formData.whatsapp,
+      satisfaction: formData.satisfaction,
+      other_reason: formData.other_reason,
+    };
+
+    try {
+      const { error } = await supabase
+        .from("questionnaire_responses")
+        .insert([supabaseData]);
+      if (error) {
+        toast({
+          title: "Submission Failed",
+          description: "There was an error saving your response. Please try again.",
+          variant: "destructive",
+        });
+        setError("Failed to save response. Please try again.");
+        return;
+      }
+      toast({
+        title: "Submitted Successfully!",
+        description: "Your healthcare questionnaire has been saved securely. Thank you for your valuable feedback.",
+      });
+      onSubmit(formData);
+    } catch (err) {
+      toast({
+        title: "Submission Failed",
+        description: "Unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+      setError("Unexpected error. Please try again.");
+    }
   }
 
   return (
@@ -146,7 +219,133 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
             </div>
           </div>
 
+          {/* Mandatory Personal Information Section */}
+          <div className="question-group print-avoid-break mb-6">
+            <h3 className="text-lg font-semibold text-gray-700 mb-4">Personal Information <span className="text-red-600">(Required)</span> / व्यक्तिगत जानकारी</h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block">
+                  <span className="text-gray-700">Your name / आपका नाम <span className="text-red-600">*</span>:</span>
+                  <input
+                    type="text"
+                    value={formData.name || ""}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
+                    required
+                  />
+                </label>
+              </div>
+              <div>
+                <label className="block">
+                  <span className="text-gray-700">Age / आयु <span className="text-red-600">*</span>:</span>
+                  <input
+                    type="number"
+                    value={formData.age || ""}
+                    onChange={(e) => handleInputChange("age", e.target.value)}
+                    className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
+                    required
+                  />
+                </label>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4 mt-4">
+              <div>
+                <label className="block">
+                  <span className="text-gray-700">Gender / लिंग <span className="text-red-600">*</span>:</span>
+                  <select
+                    value={formData.gender || ""}
+                    onChange={(e) => handleInputChange("gender", e.target.value)}
+                    className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
+                    required
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male / पुरुष</option>
+                    <option value="female">Female / महिला</option>
+                    <option value="other">Other / अन्य</option>
+                  </select>
+                </label>
+              </div>
+              <div>
+                <label className="block">
+                  <span className="text-gray-700">Contact Details <span className="text-red-600">*</span>:</span>
+                  <input
+                    type="tel"
+                    value={formData.contact || ""}
+                    onChange={(e) => handleInputChange("contact", e.target.value)}
+                    className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
+                    required
+                    placeholder="Phone or Email"
+                  />
+                </label>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4 mt-4">
+              <div>
+                <label className="block">
+                  <span className="text-gray-700">Address / पता <span className="text-red-600">*</span>:</span>
+                  <input
+                    type="text"
+                    value={formData.address || ""}
+                    onChange={(e) => handleInputChange("address", e.target.value)}
+                    className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
+                    required
+                    placeholder="Full address"
+                  />
+                </label>
+              </div>
+              <div>
+                <label className="block">
+                  <span className="text-gray-700">Emergency Contact / आपातकालीन संपर्क <span className="text-red-600">*</span>:</span>
+                  <input
+                    type="tel"
+                    value={formData.emergency_contact || ""}
+                    onChange={(e) => handleInputChange("emergency_contact", e.target.value)}
+                    className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
+                    required
+                    placeholder="Emergency phone number"
+                  />
+                </label>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4 mt-4">
+              <div>
+                <label className="block">
+                  <span className="text-gray-700">Blood Group / रक्त समूह <span className="text-red-600">*</span>:</span>
+                  <select
+                    value={formData.blood_group || ""}
+                    onChange={(e) => handleInputChange("blood_group", e.target.value)}
+                    className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
+                    required
+                  >
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </select>
+                </label>
+              </div>
+              <div>
+                <label className="block">
+                  <span className="text-gray-700">Local area / स्थानीय क्षेत्र:</span>
+                  <input
+                    type="text"
+                    value={formData.area || ""}
+                    onChange={(e) => handleInputChange("area", e.target.value)}
+                    className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
+                    placeholder="Locality or area"
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-3">
+            {error && <div className="text-red-600 font-semibold mb-2">{error}</div>}
             {/* Question 1 */}
             <div className="question-group print-avoid-break">
               <h3 className="text-lg font-semibold text-gray-800 mb-3">
@@ -156,28 +355,28 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                 क्या आपने पिछले 12 महीनों में Chhatarpur में किसी प्रशिक्षित डॉक्टर (MBBS/MD/AIIMS स्नातक) से इलाज कराया है?
               </p>
               <div className="space-y-2">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="visitedDoctor"
-                    value="yes"
-                    checked={formData.visitedDoctor === "yes"}
-                    onChange={(e) => handleInputChange("visitedDoctor", e.target.value)}
-                    className="mr-3"
-                  />
-                  <span>Yes / हाँ</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="visitedDoctor"
-                    value="no"
-                    checked={formData.visitedDoctor === "no"}
-                    onChange={(e) => handleInputChange("visitedDoctor", e.target.value)}
-                    className="mr-3"
-                  />
-                  <span>No / नहीं</span>
-                </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="visited_doctor"
+                      value="yes"
+                      checked={formData.visited_doctor === "yes"}
+                      onChange={(e) => handleInputChange("visited_doctor", e.target.value)}
+                      className="mr-3"
+                    />
+                    <span>Yes / हाँ</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="visited_doctor"
+                      value="no"
+                      checked={formData.visited_doctor === "no"}
+                      onChange={(e) => handleInputChange("visited_doctor", e.target.value)}
+                      className="mr-3"
+                    />
+                    <span>No / नहीं</span>
+                  </label>
               </div>
             </div>
 
@@ -199,8 +398,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                   <label key={option.value} className="flex items-start">
                     <input
                       type="checkbox"
-                      checked={formData.noVisitReasons?.includes(option.value)}
-                      onChange={(e) => handleCheckboxChange("noVisitReasons", option.value, e.target.checked)}
+                      checked={formData.no_visit_reasons?.includes(option.value)}
+                      onChange={(e) => handleCheckboxChange("no_visit_reasons", option.value, e.target.checked)}
                       className="mr-3 mt-1"
                     />
                     <span>{option.label}</span>
@@ -212,8 +411,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                   <span className="text-gray-700">Other (please specify) / अन्य (कृपया बताएं):</span>
                   <input
                     type="text"
-                    value={formData.otherReason || ""}
-                    onChange={(e) => handleInputChange("otherReason", e.target.value)}
+                    value={formData.other_reason || ""}
+                    onChange={(e) => handleInputChange("other_reason", e.target.value)}
                     className="mt-1 block w-full"
                   />
                 </label>
@@ -248,7 +447,7 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                   <div key={service.value} className="flex items-center space-x-4">
                     <span className="flex-1">{service.label}</span>
                     <select
-                      value={formData.servicesNeeded?.[service.value] || ""}
+                      value={formData.services_needed?.[service.value] || ""}
                       onChange={(e) => handleRankingChange(service.value, e.target.value)}
                       className="border border-gray-300 rounded px-2 py-1"
                     >
@@ -283,8 +482,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                       type="radio"
                       name="useWellnessCentre"
                       value={option.value}
-                      checked={formData.useWellnessCentre === option.value}
-                      onChange={(e) => handleInputChange("useWellnessCentre", e.target.value)}
+                      checked={formData.use_wellness_centre === option.value}
+                      onChange={(e) => handleInputChange("use_wellness_centre", e.target.value)}
                       className="mr-3"
                     />
                     <span>{option.label}</span>
@@ -296,24 +495,23 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
             {/* Question 5 */}
             <div className="question-group print-avoid-break">
               <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                5. How important is having CGHS/CAPF empanelled services nearby for you or your family? (1 = Not
-                important, 5 = Very important)
+                5. How important is having CGHS/CAPF empanelled services nearby for you or your family? (1 = Not important, 5 = Very important)
               </h3>
               <p className="hindi-text text-gray-700 mb-4">
                 CGHS/CAPF सेवाएँ आपके लिए कितनी ज़रूरी हैं? (1 = बिल्कुल आवश्यक नहीं, 5 = बहुत ज़रूरी)
               </p>
               <div className="flex space-x-6">
-                {[1, 2, 3, 4, 5].map((rating) => (
-                  <label key={rating} className="flex items-center">
+                {[1,2,3,4,5].map((num) => (
+                  <label key={num} className="flex items-center">
                     <input
                       type="radio"
-                      name="cghsImportance"
-                      value={rating}
-                      checked={formData.cghsImportance === rating.toString()}
-                      onChange={(e) => handleInputChange("cghsImportance", e.target.value)}
-                      className="mr-2"
+                      name="cghs_importance"
+                      value={String(num)}
+                      checked={formData.cghs_importance === String(num)}
+                      onChange={(e) => handleInputChange("cghs_importance", e.target.value)}
+                      className="mr-2 h-4 w-4 border-gray-400 focus:ring-medical-500"
                     />
-                    <span>{rating}</span>
+                    <span className="text-base">{num}</span>
                   </label>
                 ))}
               </div>
@@ -327,7 +525,7 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
               <p className="hindi-text text-gray-700 mb-4">
                 क्या आपको स्थानीय स्तर पर कभी गलत या अनावश्यक टेस्ट/इलाज मिला है?
               </p>
-              <div className="space-y-2 mb-4">
+              <div className="flex flex-col space-y-2 mb-4">
                 {[
                   { value: "yes-often", label: "Yes-often / हाँ-अक्सर" },
                   { value: "yes-once-twice", label: "Yes-once or twice / हाँ-एक / दो बार" },
@@ -338,11 +536,11 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                       type="radio"
                       name="wrongTreatment"
                       value={option.value}
-                      checked={formData.wrongTreatment === option.value}
-                      onChange={(e) => handleInputChange("wrongTreatment", e.target.value)}
-                      className="mr-3"
+                      checked={formData.wrong_treatment === option.value}
+                      onChange={(e) => handleInputChange("wrong_treatment", e.target.value)}
+                      className="mr-2 h-4 w-4 border-gray-400 focus:ring-medical-500"
                     />
-                    <span>{option.label}</span>
+                    <span className="text-base">{option.label}</span>
                   </label>
                 ))}
               </div>
@@ -350,8 +548,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                 <label className="block">
                   <span className="text-gray-700">If yes, please briefly explain / अगर हाँ, संक्षेप में बताएं:</span>
                   <textarea
-                    value={formData.wrongTreatmentDetails || ""}
-                    onChange={(e) => handleInputChange("wrongTreatmentDetails", e.target.value)}
+                    value={formData.wrong_treatment_details || ""}
+                    onChange={(e) => handleInputChange("wrong_treatment_details", e.target.value)}
                     className="mt-1 block w-full border-2 border-gray-300 rounded-md focus:border-medical-500 outline-none p-3"
                     rows={3}
                   />
@@ -378,10 +576,10 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                   <label key={option.value} className="flex items-center">
                     <input
                       type="radio"
-                      name="bloodTestCost"
+                      name="blood_test_cost"
                       value={option.value}
-                      checked={formData.bloodTestCost === option.value}
-                      onChange={(e) => handleInputChange("bloodTestCost", e.target.value)}
+                      checked={formData.blood_test_cost === option.value}
+                      onChange={(e) => handleInputChange("blood_test_cost", e.target.value)}
                       className="mr-3"
                     />
                     <span>{option.label}</span>
@@ -409,8 +607,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                       type="radio"
                       name="genericMedicines"
                       value={option.value}
-                      checked={formData.genericMedicines === option.value}
-                      onChange={(e) => handleInputChange("genericMedicines", e.target.value)}
+                      checked={formData.generic_medicines === option.value}
+                      onChange={(e) => handleInputChange("generic_medicines", e.target.value)}
                       className="mr-3"
                     />
                     <span>{option.label}</span>
@@ -435,8 +633,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                   <label key={option.value} className="flex items-start">
                     <input
                       type="checkbox"
-                      checked={formData.visitHours?.includes(option.value)}
-                      onChange={(e) => handleCheckboxChange("visitHours", option.value, e.target.checked)}
+                      checked={formData.visit_hours?.includes(option.value)}
+                      onChange={(e) => handleCheckboxChange("visit_hours", option.value, e.target.checked)}
                       className="mr-3 mt-1"
                     />
                     <span>{option.label}</span>
@@ -460,8 +658,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                     type="radio"
                     name="healthSessions"
                     value="yes"
-                    checked={formData.healthSessions === "yes"}
-                    onChange={(e) => handleInputChange("healthSessions", e.target.value)}
+                    checked={formData.health_sessions === "yes"}
+                    onChange={(e) => handleInputChange("health_sessions", e.target.value)}
                     className="mr-3"
                   />
                   <span>Yes / हाँ</span>
@@ -471,8 +669,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                     type="radio"
                     name="healthSessions"
                     value="no"
-                    checked={formData.healthSessions === "no"}
-                    onChange={(e) => handleInputChange("healthSessions", e.target.value)}
+                    checked={formData.health_sessions === "no"}
+                    onChange={(e) => handleInputChange("health_sessions", e.target.value)}
                     className="mr-3"
                   />
                   <span>No / नहीं</span>
@@ -483,8 +681,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                   <span className="text-gray-700">Which topics interest you most? / किन विषयों में रुचि है?</span>
                   <input
                     type="text"
-                    value={formData.healthTopics || ""}
-                    onChange={(e) => handleInputChange("healthTopics", e.target.value)}
+                    value={formData.health_topics || ""}
+                    onChange={(e) => handleInputChange("health_topics", e.target.value)}
                     className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
                   />
                 </label>
@@ -520,8 +718,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                       type="radio"
                       name="followUp"
                       value="phone"
-                      checked={formData.followUp === "phone"}
-                      onChange={(e) => handleInputChange("followUp", e.target.value)}
+                      checked={formData.follow_up === "phone"}
+                      onChange={(e) => handleInputChange("follow_up", e.target.value)}
                       className="mr-3"
                     />
                     <span>Yes / हाँ - Phone / फोन:</span>
@@ -538,8 +736,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                       type="radio"
                       name="followUp"
                       value="whatsapp"
-                      checked={formData.followUp === "whatsapp"}
-                      onChange={(e) => handleInputChange("followUp", e.target.value)}
+                      checked={formData.follow_up === "whatsapp"}
+                      onChange={(e) => handleInputChange("follow_up", e.target.value)}
                       className="mr-3"
                     />
                     <span>Yes / हाँ - WhatsApp:</span>
@@ -556,8 +754,8 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                       type="radio"
                       name="followUp"
                       value="no"
-                      checked={formData.followUp === "no"}
-                      onChange={(e) => handleInputChange("followUp", e.target.value)}
+                      checked={formData.follow_up === "no"}
+                      onChange={(e) => handleInputChange("follow_up", e.target.value)}
                       className="mr-3"
                     />
                     <span>No / नहीं</span>
@@ -586,46 +784,6 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
               </div>
             </div>
 
-            {/* Optional Information */}
-            <div className="question-group print-avoid-break">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Optional Information / वैकल्पिक जानकारी</h3>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block">
-                    <span className="text-gray-700">Your name / आपका नाम:</span>
-                    <input
-                      type="text"
-                      value={formData.name || ""}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
-                      className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label className="block">
-                    <span className="text-gray-700">Age / आयु:</span>
-                    <input
-                      type="number"
-                      value={formData.age || ""}
-                      onChange={(e) => handleInputChange("age", e.target.value)}
-                      className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
-                    />
-                  </label>
-                </div>
-              </div>
-              <div className="mt-4">
-                <label className="block">
-                  <span className="text-gray-700">Local area / पता (colony/sector):</span>
-                  <input
-                    type="text"
-                    value={formData.area || ""}
-                    onChange={(e) => handleInputChange("area", e.target.value)}
-                    className="mt-1 block w-full border-b-2 border-gray-300 focus:border-medical-500 outline-none py-2"
-                  />
-                </label>
-              </div>
-            </div>
-
             <div className="text-center pt-4">
               <button type="submit" className="btn-primary no-print">
                 Submit Questionnaire / प्रश्नावली जमा करें
@@ -637,10 +795,10 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
             {/* Thank you message */}
             <div className="text-center mb-3">
               <p className="text-xs text-medical-700 mb-1 font-medium hindi-text leading-tight">
-                धन्यवाद — आपका कीमती समय और सुझाव हमारे लिए बहुत महत्वपूर्ण हैं।
+                धन्यवाद - आपका कीमती समय और सुझाव हमारे लिए बहुत महत्वपूर्ण हैं।
               </p>
               <p className="text-xs text-medical-700 mb-1 font-medium leading-tight">
-                Thank you — your time and feedback are valuable to us.
+                Thank you - your time and feedback are valuable to us.
               </p>
               <div className="text-xs text-medical-600 font-medium">
                 Team (AIIMS alumni outreach / Chhatarpur Wellness Initiative)
@@ -762,4 +920,4 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
   )
 }
 
-export default QuestionnaireForm
+export default QuestionnaireForm;
