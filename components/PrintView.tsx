@@ -656,7 +656,7 @@ const PrintView: React.FC<PrintViewProps> = ({ formData, onBack, onPrint }) => {
                 <div className="text-center">
                   <div className="w-16 h-16 mx-auto mb-1 border-2 border-healthcare-300 rounded-lg p-1 bg-white shadow-sm">
                     <img
-                      src="/images/qr-code.png"
+                      src="/images/Ziagnosis_Qrcode.jpg"
                       alt="Ziagnosis QR Code"
                       className="w-full h-full object-contain"
                     />
@@ -715,7 +715,7 @@ const PrintView: React.FC<PrintViewProps> = ({ formData, onBack, onPrint }) => {
                   </div>
                   <div className="flex items-center justify-end space-x-2 text-xs">
                     <span className="text-medical-600">
-                      Follow @ziagnosislab:
+                      Follow us @ziagnosislab:
                     </span>
                     <div className="social-row">
                       <div className="flex items-center space-x-1">
