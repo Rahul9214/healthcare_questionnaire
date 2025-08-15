@@ -1057,7 +1057,7 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                       +91-9315947553
                     </span>
                   </div>
-                  <div className="ml-6 text-xs text-medical-500 leading-tight">
+                  <div className="ml-6 text-xs font-semibold text-medical-600 leading-tight">
                     +91-11-41000506
                   </div>
                 </div>
@@ -1073,7 +1073,7 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                       className="w-full h-full object-contain"
                     />
                   </div>
-                  <p className="text-xs text-medical-600 font-medium">
+                  <p className="text-xs text-medical-600 font-semibold">
                     Scan Me
                   </p>
                 </div>
@@ -1120,13 +1120,13 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
                     </div>
                     <a
                       href="mailto:info@ziagnosis.com"
-                      className="text-xs text-medical-600 hover:underline"
+                      className="text-xs font-semibold text-medical-600 hover:underline"
                     >
                       info@ziagnosis.com
                     </a>
                   </div>
                   <div className="flex items-center justify-end space-x-2 text-xs">
-                    <span className="text-medical-600">
+                    <span className="text-xs font-semibold text-medical-600">
                       Follow us @ziagnosislab:
                     </span>
                     <div className="social-row">
