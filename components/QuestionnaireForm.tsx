@@ -135,6 +135,17 @@ const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({ onSubmit }) => {
       other_reason: formData.other_reason,
     };
 
+    // Check if supabase is configured
+    if (!supabase) {
+      toast({
+        title: "Submission Failed",
+        description: "Supabase is not configured. Please contact the administrator.",
+        variant: "destructive",
+      });
+      setError("Supabase is not configured. Please contact the administrator.");
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from("questionnaire_responses")

@@ -1,5 +1,5 @@
-"use client"
-"use client"
+"use client";
+
 import React, { useState } from "react";
 import QuestionnaireForm, { type FormData } from "../components/QuestionnaireForm";
 import PrintView from "../components/PrintView";
