@@ -41,55 +41,11 @@
     --sidebar-primary-foreground: 0 0% 98%;
   }
 }
-/* Enhanced watermark with better visibility and positioning */
-.watermark-bg {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #eff6ff 100%);
-}
-
-.watermark-bg::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-12deg);
-  width: 300px;
-  height: 300px;
-  background-image: url("/images/ziagnosis-logo.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.04;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.watermark-bg > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* Enhanced form container with stunning gradients */
-/* Stunning watermark background for form */
-.form-container {
-  position: relative;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 30%, #eff6ff 70%, #ffffff 100%);
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @theme {
   --font-sans: var(--font-inter), "Noto Sans Devanagari", system-ui, sans-serif;
 
-  /* Clean Healthcare Color Palette */
-  /* CSS Variables for theme */
   :root {
-    --font-sans: var(--font-inter), "Noto Sans Devanagari", system-ui, sans-serif;
-
     /* Clean Healthcare Color Palette */
     --color-medical-50: #f8fafc;
     --color-medical-100: #f1f5f9;
@@ -138,7 +94,7 @@
     --color-warning-800: #9a3412;
     --color-warning-900: #7c2d12;
 
-    /* Base theme colors */
+    /* Base theme tokens */
     --color-border: 214.3 31.8% 91.4%;
     --color-input: 214.3 31.8% 91.4%;
     --color-ring: 222.2 84% 4.9%;
@@ -163,13 +119,12 @@
   }
 }
 
-/* Enhanced watermark with better visibility and positioning */
+/* ---------- Watermark ---------- */
 .watermark-bg {
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #eff6ff 100%);
 }
-
 .watermark-bg::before {
   content: "";
   position: absolute;
@@ -186,14 +141,12 @@
   z-index: 0;
   pointer-events: none;
 }
-
 .watermark-bg > * {
   position: relative;
   z-index: 1;
 }
 
-/* Enhanced form container with stunning gradients */
-/* Stunning watermark background for form */
+/* ---------- Form Container ---------- */
 .form-container {
   position: relative;
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 30%, #eff6ff 70%, #ffffff 100%);
@@ -224,7 +177,11 @@
   z-index: 1;
 }
 
-/* Compact question groups optimized for A4 printing */
+/* ---------- Question Group ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 .question-group {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 6px;
@@ -234,15 +191,15 @@
   transition: all 0.2s ease;
   margin-bottom: 0.75rem;
   backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease-out;
 }
-
 .question-group:hover {
   border-color: #cbd5e1;
   box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
   transform: translateY(-1px);
 }
 
-/* Compact input styling for A4 optimization */
+/* ---------- Inputs ---------- */
 input[type="text"],
 input[type="number"],
 input[type="tel"],
@@ -256,7 +213,6 @@ select {
   font-size: 13px;
   line-height: 1.4;
 }
-
 input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="tel"]:focus,
@@ -268,7 +224,7 @@ select:focus {
   background: #ffffff;
 }
 
-/* Compact checkbox and radio styles */
+/* ---------- Checkboxes & Radios ---------- */
 input[type="checkbox"],
 input[type="radio"] {
   width: 14px;
@@ -280,17 +236,12 @@ input[type="radio"] {
   cursor: pointer;
   position: relative;
 }
-
-input[type="radio"] {
-  border-radius: 50%;
-}
-
+input[type="radio"] { border-radius: 50%; }
 input[type="checkbox"]:checked,
 input[type="radio"]:checked {
   background: #3b82f6;
   border-color: #3b82f6;
 }
-
 input[type="checkbox"]:checked::after {
   content: "✓";
   position: absolute;
@@ -300,7 +251,6 @@ input[type="checkbox"]:checked::after {
   color: white;
   font-weight: bold;
 }
-
 input[type="radio"]:checked::after {
   content: "●";
   position: absolute;
@@ -310,7 +260,7 @@ input[type="radio"]:checked::after {
   color: white;
 }
 
-/* Enhanced button styling with better visibility */
+/* ---------- Buttons ---------- */
 .btn-primary {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
@@ -323,13 +273,11 @@ input[type="radio"]:checked::after {
   box-shadow: 0 2px 4px 0 rgba(59, 130, 246, 0.2);
   font-size: 14px;
 }
-
 .btn-primary:hover {
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px -1px rgba(59, 130, 246, 0.3);
 }
-
 .btn-secondary {
   background: rgba(255, 255, 255, 0.9);
   color: #3b82f6;
@@ -341,62 +289,62 @@ input[type="radio"]:checked::after {
   transition: all 0.2s ease;
   font-size: 13px;
 }
-
 .btn-secondary:hover {
   background: #3b82f6;
   color: white;
 }
 
-/* Enhanced footer styling for world-class design */
+/* ---------- Footer ---------- */
 .footer-section {
   background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #f0f9ff 100%);
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
 }
-
-.footer-contact-icon {
+.footer-contact-icon,
+.footer-qr-container,
+.footer-social-icons {
   transition: all 0.2s ease;
 }
-
 .footer-contact-icon:hover {
   transform: scale(1.1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-.footer-qr-container {
-  transition: all 0.2s ease;
-}
-
 .footer-qr-container:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15);
 }
-
-.footer-social-icons {
-  transition: all 0.2s ease;
-}
-
 .footer-social-icons:hover {
   transform: scale(1.05);
 }
-
 .footer-address-bar {
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
   transition: all 0.2s ease;
 }
-
 .footer-address-bar:hover {
   box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
 }
 
-/* Optimized print styles for single A4 page */
+/* ---------- Stunning gradient text effects ---------- */
+.gradient-text {
+  background: linear-gradient(135deg, #1e40af, #059669, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s ease-in-out infinite;
+}
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ---------- Enhanced border styles ---------- */
+.border-l-3 { border-left-width: 3px; }
+
+/* ---------- Print Styles (A4 optimized) ---------- */
 @media print {
-  @page {
-    size: A4;
-    margin: 0.4in;
-  }
+  @page { size: A4; margin: 0.4in; }
 
   body {
     print-color-adjust: exact;
@@ -406,13 +354,9 @@ input[type="radio"]:checked::after {
     line-height: 1.3 !important;
   }
 
-  .no-print {
-    display: none !important;
-  }
+  .no-print { display: none !important; }
 
-  .print-break {
-    page-break-before: always;
-  }
+  .print-break { page-break-before: always; }
 
   .print-avoid-break {
     page-break-inside: avoid;
@@ -442,7 +386,6 @@ input[type="radio"]:checked::after {
     height: 250px !important;
   }
 
-  /* Enhanced footer print styling */
   .footer-section {
     background: white !important;
     border: 1px solid #000 !important;
@@ -466,7 +409,6 @@ input[type="radio"]:checked::after {
     box-shadow: none !important;
   }
 
-  /* Fixed print button visibility */
   .print-button,
   .btn-primary {
     background: #000 !important;
@@ -478,34 +420,19 @@ input[type="radio"]:checked::after {
     font-size: 12px !important;
   }
 
-  /* Compact print layout */
-  h1 {
-    font-size: 16px !important;
-    margin-bottom: 0.3rem !important;
-  }
-  h2 {
-    font-size: 14px !important;
-    margin-bottom: 0.3rem !important;
-  }
-  h3 {
-    font-size: 13px !important;
-    margin-bottom: 0.3rem !important;
-  }
+  /* Compact print typography & spacing */
+  h1 { font-size: 16px !important; margin-bottom: 0.3rem !important; }
+  h2 { font-size: 14px !important; margin-bottom: 0.3rem !important; }
+  h3 { font-size: 13px !important; margin-bottom: 0.3rem !important; }
 
-  p,
-  span,
-  label {
+  p, span, label {
     font-size: 11px !important;
     line-height: 1.3 !important;
     margin-bottom: 0.2rem !important;
   }
 
-  .hindi-text {
-    font-size: 10px !important;
-    line-height: 1.3 !important;
-  }
+  .hindi-text { font-size: 10px !important; line-height: 1.3 !important; }
 
-  /* Enhanced print visibility for form elements */
   input[type="checkbox"]:checked::after {
     content: "✓" !important;
     color: black !important;
@@ -531,148 +458,100 @@ input[type="radio"]:checked::after {
     height: 12px !important;
   }
 
-  /* Ensure all text is black in print */
-  * {
-    color: black !important;
-  }
+  * { color: black !important; }
 
-  /* Compact spacing for A4 optimization */
-  .space-y-2 > * + * {
-    margin-top: 0.3rem !important;
-  }
-  .space-y-3 > * + * {
-    margin-top: 0.4rem !important;
-  }
-  .space-y-4 > * + * {
-    margin-top: 0.5rem !important;
-  }
-  .mb-3 {
-    margin-bottom: 0.4rem !important;
-  }
-  .mb-4 {
-    margin-bottom: 0.5rem !important;
-  }
-  .mb-6 {
-    margin-bottom: 0.6rem !important;
-  }
-  .mb-8 {
-    margin-bottom: 0.8rem !important;
-  }
-  .p-4 {
-    padding: 0.4rem !important;
-  }
-  .p-6 {
-    padding: 0.5rem !important;
-  }
-  .py-4 {
-    padding-top: 0.4rem !important;
-    padding-bottom: 0.4rem !important;
-  }
-  .py-8 {
-    padding-top: 0.6rem !important;
-    padding-bottom: 0.6rem !important;
-  }
+  .space-y-2 > * + * { margin-top: 0.3rem !important; }
+  .space-y-3 > * + * { margin-top: 0.4rem !important; }
+  .space-y-4 > * + * { margin-top: 0.5rem !important; }
+  .mb-3 { margin-bottom: 0.4rem !important; }
+  .mb-4 { margin-bottom: 0.5rem !important; }
+  .mb-6 { margin-bottom: 0.6rem !important; }
+  .mb-8 { margin-bottom: 0.8rem !important; }
+  .p-4 { padding: 0.4rem !important; }
+  .p-6 { padding: 0.5rem !important; }
+  .py-4 { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
+  .py-8 { padding-top: 0.6rem !important; padding-bottom: 0.6rem !important; }
 }
 
-/* Enhanced responsive design */
+/* ---------- Responsive (<=768px) ---------- */
 @media (max-width: 768px) {
-  .question-group {
-    padding: 0.75rem;
+  .question-group { padding: 0.75rem; }
+  .btn-primary { padding: 10px 18px; font-size: 13px; }
+  .form-container { padding: 1rem; }
+
+  /* Mobile-optimized footer layout */
+  .footer-section { 
+    padding: 1rem; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 1.2rem; 
   }
-
-  .btn-primary {
-    padding: 10px 18px;
-    font-size: 13px;
+  .footer-section .grid { 
+    display: flex !important; 
+    flex-direction: column !important; 
+    gap: 1.2rem !important; 
   }
-
-  input[type="checkbox"],
-  input[type="radio"] {
-    width: 14px;
-    height: 14px;
+  .footer-section .text-left,
+  .footer-section .text-right { 
+    margin-bottom: 0.8rem; 
+    text-align: center !important; 
   }
-
-  .form-container {
-    padding: 1rem;
+  .footer-section .flex.justify-center { 
+    justify-content: center !important; 
+    align-items: center !important; 
+    text-align: center !important; 
+    margin-bottom: 0.8rem; 
   }
-
-    /* Mobile-optimized footer layout */
-    .footer-section {
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 1.2rem;
-    }
-    .footer-section .grid {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 1.2rem !important;
-    }
-    .footer-section .text-left {
-      margin-bottom: 0.8rem;
-    }
-    .footer-section .flex.justify-center {
-      justify-content: center !important;
-      align-items: center !important;
-      text-align: center !important;
-      margin-bottom: 0.8rem;
-    }
-    .footer-section .text-right {
-      margin-bottom: 0.8rem;
-      text-align: center !important;
-    }
-    .footer-contact-icon,
-    .footer-qr-container {
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-    .footer-section .flex.items-center {
-      flex-direction: row !important;
-      flex-wrap: wrap !important;
-      gap: 0.5rem !important;
-    }
-    .footer-section .flex.items-center > * {
-      margin-bottom: 0.3rem !important;
-      width: 100%;
-    }
-}
-
-/* Stunning gradient text effects */
-.gradient-text {
-  background: linear-gradient(135deg, #1e40af, #059669, #3b82f6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-shift 3s ease-in-out infinite;
-}
-
-@keyframes gradient-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
+  .footer-contact-icon, 
+  .footer-qr-container { 
+    margin-bottom: 0.5rem; 
+    display: block; 
   }
-  50% {
-    background-position: 100% 50%;
+  .footer-section .flex.items-center { 
+    flex-direction: row !important; 
+    flex-wrap: wrap !important; 
+    gap: 0.5rem !important; 
+  } 
+  .footer-section .flex.items-center > * { 
+    margin-bottom: 0.3rem !important; 
+    width: 100%;
   }
-}
-
-/* Enhanced border styles */
-.border-l-3 {
-  border-left-width: 3px;
-}
-
-/* Subtle animations for better UX */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+  .footer-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2rem !important;
+    align-items: center !important;
+    text-align: center !important;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .footer-grid > div {
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-}
-
-.question-group {
-  animation: fadeIn 0.3s ease-out;
+  .social-row {
+    display: flex !important;
+    gap: 0.75rem !important;
+    justify-content: center !important;
+    flex-wrap: nowrap !important;
+  }
+  .address-bar {
+    padding: 0.75rem 1rem;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    text-align: left !important;
+  }
+  .address-bar svg {
+    width: 1rem !important;
+    height: 1rem !important;
+    flex-shrink: 0 !important;
+  }
+  .address-bar p {
+    margin: 0 !important;
+    font-size: 0.75rem !important;
+    line-height: 1.3 !important;
+  }
 }
